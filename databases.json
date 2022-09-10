@@ -1,0 +1,12 @@
+{"DESA STG": { 
+"motor":"Oracle","host":"srvocexa-99xj9-scan.oraclevcn.ad-fravega.com","user2":"STG","passwd":"fravega.2018","database":"TAF_STDES.snprodaz1.fravega.oraclevcn.com",
+"port":1521},
+"DESA EDW": {
+"motor":"Oracle","host":"srvocexa-99xj9-scan.oraclevcn.ad-fravega.com","user2":"EDW","passwd":"fravega.2018","database":"TAF_DWDES.snprodaz1.fravega.oraclevcn.com",
+"port":1521},
+"PROD STG" : { 
+"motor":"Oracle","host":"srvocexa-99xj9-scan.oraclevcn.ad-fravega.com","user2":"STG",
+"passwd":"wD1xh2ly1uXPiYXdYYDB","database":"TAF_STPRD.snprodaz1.fravega.oraclevcn.com","port":1521},
+"PROD EDW": {
+"motor":"Oracle","host":"srvocexa-99xj9-scan.oraclevcn.ad-fravega.com","user2":"EDW","passwd":"R2uVkGWAf2Lz9kFTGROU","database":"TAF_DWPRD.snprodaz1.fravega.oraclevcn.com","port":1521}
+}

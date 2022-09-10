@@ -1,6 +1,7 @@
 # Project-specific stuff
 fravega_refresh_token.sh
 google-ads.yaml
+out/
 
 # Python virtual environment
 venv/

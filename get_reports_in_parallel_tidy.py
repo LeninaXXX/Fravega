@@ -46,89 +46,101 @@ def main(client, customer_ids):
     # Define the GAQL query strings to run for each customer ID.
 
     # Keywords Performance is the old category 
-    keywords_performance_query = (
-        "SELECT "
-            "customer.descriptive_name, "                                   # AccountDescriptiveName
-            "segments.date, "                                               # Date
-            "segments.device, "                                             # Device
-            # XXX: According to the documentation in https://developers.google.com/google-ads/api/fields/v11/segments
-            # segments.device cannot be SELECTed with metrics.average_page_views
-            "campaign.name, "                                               # CampaignName
-            "ad_group_criterion.keyword.text, "                             # Criteria
-            "ad_group.name, "                                               # AdGroupName
-            "ad_group_criterion.status, "                                   # Status  
-            "ad_group_criterion.keyword.match_type, "                       # KeywordMatchType
-            "ad_group_criterion.effective_cpc_bid_micros, "                 # CpcBid
-            "metrics.clicks, "                                              # Clicks
-            "metrics.impressions, "                                         # Impressions
-            "metrics.average_cpc, "                                         # AverageCpc
-            "metrics.ctr, "                                                 # Ctr
-            "metrics.cost_micros, "                                         # Cost
-          # (*DEPRECATED*)                                                  # AveragePosition <--------------- XXX
-            "ad_group_criterion.quality_info.quality_score, "               # QualityScore
-          # (REQUIRES `Select label.name from the resource ad_group_label`) # Labels <------------------------ XXX
-            "metrics.search_impression_share, "                             # SearchImpressionShare
-            "metrics.search_rank_lost_impression_share, "                   # SearchRankLostImpressionShare
-            "metrics.search_exact_match_impression_share, "                 # SearchExactMatchImpressionShare
-            "metrics.conversions, "                                         # Conversions
-            "metrics.all_conversions, "                                     # AllConversions
-            "metrics.cross_device_conversions, "                            # CrossDeviceConversions
-            "metrics.conversions_value, "                                   # ConversionValue
-            "metrics.all_conversions_value, "                               # AllConversionValue
-            "metrics.video_quartile_p100_rate, "                            # VideoQuartile100Rate
-            "metrics.video_quartile_p75_rate, "                             # VideoQuartile75Rate
-            "metrics.video_quartile_p50_rate, "                             # VideoQuartile50Rate
-          # "metrics.average_page_views, "                                  # AveragePageviews
-            # XXX: THIS METRIC CANNOT COEXIST WITH segments.device?
-            "metrics.video_views "              # VideoViews
-        """
-        FROM keyword_view
-        WHERE segments.date DURING TODAY
-        AND campaign.status = "ENABLED"
-        ORDER BY metrics.clicks DESC
-        """
-    )
+    keywords_performance_query = { 
+        "name": "keywords_performance_query",
+        "query": (
+            "SELECT "
+                "customer.descriptive_name, "                                   # AccountDescriptiveName
+                "segments.date, "                                               # Date
+                "segments.device, "                                             # Device
+                # XXX: According to the documentation in https://developers.google.com/google-ads/api/fields/v11/segments
+                # segments.device cannot be SELECTed with metrics.average_page_views
+                "campaign.name, "                                               # CampaignName
+                "ad_group_criterion.keyword.text, "                             # Criteria
+                "ad_group.name, "                                               # AdGroupName
+                "ad_group_criterion.status, "                                   # Status  
+                "ad_group_criterion.keyword.match_type, "                       # KeywordMatchType
+                "ad_group_criterion.effective_cpc_bid_micros, "                 # CpcBid
+                "metrics.clicks, "                                              # Clicks
+                "metrics.impressions, "                                         # Impressions
+                "metrics.average_cpc, "                                         # AverageCpc
+                "metrics.ctr, "                                                 # Ctr
+                "metrics.cost_micros, "                                         # Cost
+              # (*DEPRECATED*)                                                  # AveragePosition <--------------- XXX
+                "ad_group_criterion.quality_info.quality_score, "               # QualityScore
+              # (REQUIRES `Select label.name from the resource ad_group_label`) # Labels <------------------------ XXX
+                "metrics.search_impression_share, "                             # SearchImpressionShare
+                "metrics.search_rank_lost_impression_share, "                   # SearchRankLostImpressionShare
+                "metrics.search_exact_match_impression_share, "                 # SearchExactMatchImpressionShare
+                "metrics.conversions, "                                         # Conversions
+                "metrics.all_conversions, "                                     # AllConversions
+                "metrics.cross_device_conversions, "                            # CrossDeviceConversions
+                "metrics.conversions_value, "                                   # ConversionValue
+                "metrics.all_conversions_value, "                               # AllConversionValue
+                "metrics.video_quartile_p100_rate, "                            # VideoQuartile100Rate
+                "metrics.video_quartile_p75_rate, "                             # VideoQuartile75Rate
+                "metrics.video_quartile_p50_rate, "                             # VideoQuartile50Rate
+              # "metrics.average_page_views, "                                  # AveragePageviews
+                # XXX: THIS METRIC CANNOT COEXIST WITH segments.device?
+                "metrics.video_views "              # VideoViews
+            """
+            FROM keyword_view
+            WHERE segments.date DURING TODAY
+            AND campaign.status = "ENABLED"
+            ORDER BY metrics.clicks DESC
+            """
+        )
+      }
+      # Keywords: como vos haces campa#as en marketing para pegarle a palabras. Cuando la gente busca una palabra determinada. Campa#as para laburar con palabras especificas.
+      # Ad_Performance: 
 
-    ad_performance_query = (
-        "SELECT "
-            "customer.descriptive_name, "               # AccountDescriptiveName
-            "segments.date, "                           # Date
-            "segments.device, "                         # Device
-            "campaign.name, "                           # CampaignName
-            "ad_group.name, "                           # AdGroupName
-            "ad_group_ad.ad.id, "                       # Id
-            "ad_group_ad.ad.type, "                     # AdType
-            "ad_group_ad.ad.text_ad.headline, "         # Headline
-            "ad_group_ad.ad.image_ad.name, "            # ImageCreativeName
-            "metrics.clicks, "                          # Clicks
-            "metrics.impressions, "                     # Impressions
-            "metrics.ctr, "                             # Ctr
-            "metrics.average_cpc, "                     # AverageCpc
-            "metrics.average_cpm, "                     # AverageCpm
-            "metrics.cost_micros, "                     # Cost
-          # "(DEPRECATED), "                            # DEPRECATED # AveragePosition
-            "ad_group_ad.ad.final_urls, "               # CreativeFinalUrls
-            "customer.id, "                             # ExternalCustomerId
-          # "(DEPRECATED), "                            # CreativeDestinationUrl
-          # "(DEPRECATED), "                            # CreativeFinalMobileUrls
-            "ad_group_ad.status, "                      # Status
-            "metrics.conversions, "                     # Conversions
-            "metrics.all_conversions_value, "           # AllConversionValue
-            "metrics.cross_device_conversions, "        # CrossDeviceConversions
-            "metrics.all_conversions, "                 # AllConversions
-            "metrics.conversions_value, "               # ConversionValue
-            "metrics.video_quartile_p100_rate, "        # VideoQuartile100Rate
-            "metrics.video_quartile_p75_rate, "         # VideoQuartile75Rate
-            "metrics.video_quartile_p50_rate, "         # VideoQuartile50Rate
-            "metrics.video_views "                       # VideoViews
-        
-        """
-        FROM ad_group_ad
-        WHERE segments.date DURING TODAY
-        AND campaign.status = "ENABLED"
-        ORDER BY metrics.clicks DESC
-        """
-    )
+      # objetivo de minima:
+      # -------------------
+      # 
+
+    ad_performance_query = {
+        "name": "ad_performance_query", 
+        "query": (
+            "SELECT "
+                "customer.descriptive_name, "               # AccountDescriptiveName
+                "segments.date, "                           # Date
+                "segments.device, "                         # Device
+                "campaign.name, "                           # CampaignName
+                "ad_group.name, "                           # AdGroupName
+                "ad_group_ad.ad.id, "                       # Id
+                "ad_group_ad.ad.type, "                     # AdType
+                "ad_group_ad.ad.text_ad.headline, "         # Headline
+                "ad_group_ad.ad.image_ad.name, "            # ImageCreativeName
+                "metrics.clicks, "                          # Clicks
+                "metrics.impressions, "                     # Impressions
+                "metrics.ctr, "                             # Ctr
+                "metrics.average_cpc, "                     # AverageCpc
+                "metrics.average_cpm, "                     # AverageCpm
+                "metrics.cost_micros, "                     # Cost
+              # "(DEPRECATED), "                            # DEPRECATED # AveragePosition
+                "ad_group_ad.ad.final_urls, "               # CreativeFinalUrls
+                "customer.id, "                             # ExternalCustomerId
+              # "(DEPRECATED), "                            # CreativeDestinationUrl
+              # "(DEPRECATED), "                            # CreativeFinalMobileUrls
+                "ad_group_ad.status, "                      # Status
+                "metrics.conversions, "                     # Conversions
+                "metrics.all_conversions_value, "           # AllConversionValue
+                "metrics.cross_device_conversions, "        # CrossDeviceConversions
+                "metrics.all_conversions, "                 # AllConversions
+                "metrics.conversions_value, "               # ConversionValue
+                "metrics.video_quartile_p100_rate, "        # VideoQuartile100Rate
+                "metrics.video_quartile_p75_rate, "         # VideoQuartile75Rate
+                "metrics.video_quartile_p50_rate, "         # VideoQuartile50Rate
+                "metrics.video_views "                       # VideoViews
+
+            """
+            FROM ad_group_ad
+            WHERE segments.date DURING TODAY
+            AND campaign.status = "ENABLED"
+            ORDER BY metrics.clicks DESC
+            """
+            )
+        }
         # select only last 7 days
         # ... in descending order, by metric.clicks       
 
@@ -160,9 +172,9 @@ def main(client, customer_ids):
             # success["results"] represents an array of result strings for one
             # customer ID / query combination.
             result_str = ("\n" + "-" * 80 + "\n").join(success["results"])
-            with open('out/' + str(success["customer_id"]) + '.lst', 'w') as f:
+            with open('out/' + str(success["customer_id"]) + " - " + str(success["query"]["name"]) + '.lst', 'w') as f:
                 print(result_str, file = f)
-                print(result_str)
+                # print(result_str)
 
         print("Failures:") if len(failures) else None
         for failure in failures:
@@ -199,7 +211,7 @@ def issue_search_request(client, customer_id, query):
     while True:
         try:
             stream = ga_service.search_stream(
-                customer_id=customer_id, query=query
+                customer_id=customer_id, query=query["query"]
             )
             # Returning a list of GoogleAdsRows will result in a
             # PicklingError, so instead we put the GoogleAdsRow data
@@ -224,7 +236,8 @@ def issue_search_request(client, customer_id, query):
                 True, 
                 {
                     "customer_id": customer_id,
-                    "results": result_strings
+                    "results": result_strings,
+                    "query": query # XXX:
                 }
             )
         except GoogleAdsException as ex:
