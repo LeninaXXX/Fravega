@@ -1,13 +1,13 @@
 ## Modo de Uso:
-### Archivos Requeridos y modulos requeridos:
+### Archivos y modulos requeridos:
 A no ser que se especifique lo contrario, los archivos mencionados deben existir en el mismo directorio que `get_keywords_and_ads_reports_in_parallel.py`.
 
  * `google-ads.yaml`     : Contiene las credenciales necesarias para autenticarse ante los servicios del __Google Ads API__.
  * `database.json`       : Contiene las credenciales necesarias para autenticarse ante la database __Oracle SQL Server__.
- * `instantclient_21_6/` : Directorio. Contiene el cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
+ * `instantclient_21_6`  : Cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
  
  ```
-     usage: get_keywords_and_ads_reports_in_parallel.py [-h] -c CUSTOMER_IDS [CUSTOMER_IDS ...]
+    usage: get_keywords_and_ads_reports_in_parallel.py [-h] -c CUSTOMER_IDS [CUSTOMER_IDS ...]
                                                        [-l LOGIN_CUSTOMER_ID] [-s START_DATE] [-e END_DATE]
                                                        [-k CAMPAIGN_STATUS]
 
@@ -28,13 +28,17 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
                             REMOVED, UNKNOWN, UNSPECIFIED. Defaults to: ENABLED
  ```
 
-### Refresh de credenciales:
+### Credenciales:
+#### Refresh:
  Google Ads requiere credenciales para autenticarse, que se vencen a intervalos de unos 30 dias. En tales circunstancias el script falla al correr, reportando error de autenticacion. Ante tal situacion, se requiere refrescar dichas credenciales (_"tokens"_), para ello, ejecutar el script bash:
 
  `fravega_refresh_token.sh`
 
  Este script se conectara a los servidores de autenticacion de Google Ads, que proveeran un link, y solicitara un _token_. Ese link debera accederse desde un browser, desde donde se obtendra tal _token_. Este debe ser copiado del browser y provisto al script.
- De no haber errores en el proceso, los tokens en `google-ads.yaml` estaran refrescados y seran validos por 30 dias (Asumiendo que Google no los revoque por otras razones, e.g.: eventos de seguridad).
+ De no haber errores en el proceso, los tokens provistos deberan ser reemplazados en `google-ads.yaml`. Dichos tokens seran validos por 30 dias (Asumiendo que Google no los revoque por otras razones, e.g.: eventos de seguridad).
+
+#### Caducidad del refresh_token:
+ En circunstancias excepcionales el propio refresh token puede ser ca
 
 ## Appendix:
 #### Files and things to have in mind:
