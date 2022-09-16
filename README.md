@@ -6,7 +6,14 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
  * `database.json`       : Contiene las credenciales necesarias para autenticarse ante la database __Oracle SQL Server__.
  * `instantclient_21_6`  : Cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
     Para configurar el cliente Instant Client, se puede, o bien descomentar la llamada a `cx_Oracle.init_oracle_client()` (Linea 22 en la presente version), o bien especificar una variable de entorno que `cx_Oracle` reconocera al momento de ser importada (Ver Documentacion de Instant Client en la URL antes citada)
- 
+### Installacion
+Una vez descomprimido, ejecutar:
+```
+python -m venv venv              # Creacion del Python Virtual Environment
+venv\Scripts\activate            # Activacion del virtual environment
+pip install -r requirements.txt  # Instalacion de dependecias
+```
+
 ### Modo de Uso:
 
  ```
