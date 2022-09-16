@@ -139,8 +139,8 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
 | ~~AveragePosition~~     | **(DEPRECATED)**                  |
 | CreativeFinalUrls       | ad_group_ad.ad.final_urls         |
 | ExternalCustomerId      | customer.id                       |
-| CreativeDestinationUrl  | (DEPRECATED)                      |
-| CreativeFinalMobileUrls | (DEPRECATED)                      |
+| ~~CreativeDestinationUrl~~  | (DEPRECATED)                      |
+| ~~CreativeFinalMobileUrls~~ | (DEPRECATED)                      |
 | Status 	              | ad_group_ad.status                |
 | Conversions             | metrics.conversions               |       
 | AllConversionValue      | metrics.all_conversions_value     |       
