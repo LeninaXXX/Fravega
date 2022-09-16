@@ -5,6 +5,7 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
  * `google-ads.yaml`     : Contiene las credenciales necesarias para autenticarse ante los servicios del __Google Ads API__.
  * `database.json`       : Contiene las credenciales necesarias para autenticarse ante la database __Oracle SQL Server__.
  * `instantclient_21_6`  : Cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
+    Para configurar el cliente Instant Client, se puede, o bien descomentar la llamada a `cx_Oracle.init_oracle_client()` (Linea 22 en la presente version), o bien especificar una variable de entorno que `cx_Oracle` reconocera al momento de ser importada (Ver Documentacion de Instant Client en la URL antes citada)
  
  ```
     usage: get_keywords_and_ads_reports_in_parallel.py [-h] -c CUSTOMER_IDS [CUSTOMER_IDS ...]
@@ -44,7 +45,8 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
 ### Files and things to have in mind:
 
  * `get_reports_in_parallel_original.py` : Where inquiries regarding Google Ads API are concentrated.
-  * Queries: This is the example query (lines 46 to 54 as of this writing)
+ * Queries: This is the example query (lines 46 to 54 as of this writing)
+
 ```
    # Define the GAQL query strings to run for each customer ID.
     campaign_query = """
@@ -76,76 +78,76 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
     LAST_WEEK_SUN_SAT 	    The 7-day period starting with the previous Sunday.
     LAST_WEEK_MON_SUN 	    The 7-day period starting with the previous Monday.
 
-#### Migration from old-style **Google AdWords** *AdWords Query Language* (AWQL) to **Google Ads** *Google Ads Query Language* (GAQL):
+### Migration from old-style **Google AdWords** *AdWords Query Language* (AWQL) to **Google Ads** *Google Ads Query Language* (GAQL):
 
 (From: [Resource mappings - Keywords Performance](https://developers.google.com/google-ads/api/docs/migration/mapping#keywords_performance)
 
-##### Keywords Performance
+#### Keywords Performance
     
-    | Old Fields - AWQL                         | New fields - GAQL
-    | ----------------------------------------- |:---------------------------------------
-    | AccountDescriptiveName                    | customer.descriptive_name
-    | Date                                      | segments.date
-    | Device                                    | segments.device
-    | CampaignName                              | campaign.name
-    | Criteria                                  | ad_group_criterion.keyword.text
-    | AdGroupName                               | ad_group.name
-    | Status                                    | ad_group_criterion.status
-    | KeywordMatchType                          | ad_group_criterion.keyword.match_type
-    | CpcBid                                    | ad_group_criterion.effective_cpc_bid_micros
-    | Clicks                                    | metrics.clicks
-    | Impressions                               | metrics.impressions
-    | AverageCpc                                | metrics.average_cpc
-    | Ctr                                       | metrics.ctr
-    | Cost                                      | metrics.cost_micros
-    | ~~AveragePosition~~	                    | **(DEPRECATED)**  
-    | QualityScore                              | ad_group_criterion.quality_info.quality_score
-    | Labels    			                    | REQUIRES `Select label.name from the resource ad_group_label`
-    | SearchImpressionShare                     | metrics.search_impression_share
-    | SearchRankLostImpressionShare             | metrics.search_rank_lost_impression_share
-    | SearchExactMatchImpressionShare           | metrics.search_exact_match_impression_share
-    | Conversions                               | metrics.conversions
-    | AllConversions                            | metrics.all_conversions
-    | CrossDeviceConversions                    | metrics.cross_device_conversions     
-    | ConversionValue                           | metrics.conversions_value
-    | AllConversionValue                        | metrics.all_conversions_value
-    | VideoQuartile100Rate                      | metrics.video_quartile_p100_rate
-    | VideoQuartile75Rate                       | metrics.video_quartile_p75_rate
-    | VideoQuartile50Rate                       | metrics.video_quartile_p50_rate
-    | AveragePageviews                          | metrics.average_page_views
-    | VideoViews                                | metrics.video_views
+| Old Fields - AWQL                         | New fields - GAQL
+| ----------------------------------------- |:---------------------------------------
+| AccountDescriptiveName                    | customer.descriptive_name
+| Date                                      | segments.date
+| Device                                    | segments.device
+| CampaignName                              | campaign.name
+| Criteria                                  | ad_group_criterion.keyword.text
+| AdGroupName                               | ad_group.name
+| Status                                    | ad_group_criterion.status
+| KeywordMatchType                          | ad_group_criterion.keyword.match_type
+| CpcBid                                    | ad_group_criterion.effective_cpc_bid_micros
+| Clicks                                    | metrics.clicks
+| Impressions                               | metrics.impressions
+| AverageCpc                                | metrics.average_cpc
+| Ctr                                       | metrics.ctr
+| Cost                                      | metrics.cost_micros
+| ~~AveragePosition~~	                    | **(DEPRECATED)**  
+| QualityScore                              | ad_group_criterion.quality_info.quality_score
+| Labels    			                    | REQUIRES `Select label.name from the resource ad_group_label`
+| SearchImpressionShare                     | metrics.search_impression_share
+| SearchRankLostImpressionShare             | metrics.search_rank_lost_impression_share
+| SearchExactMatchImpressionShare           | metrics.search_exact_match_impression_share
+| Conversions                               | metrics.conversions
+| AllConversions                            | metrics.all_conversions
+| CrossDeviceConversions                    | metrics.cross_device_conversions     
+| ConversionValue                           | metrics.conversions_value
+| AllConversionValue                        | metrics.all_conversions_value
+| VideoQuartile100Rate                      | metrics.video_quartile_p100_rate
+| VideoQuartile75Rate                       | metrics.video_quartile_p75_rate
+| VideoQuartile50Rate                       | metrics.video_quartile_p50_rate
+| AveragePageviews                          | metrics.average_page_views
+| VideoViews                                | metrics.video_views
 
 ##### Ad Performance
     
-    | Old Fields - AWQL       | New fields - GAQL                 |
-    | ----------------------- | ---------------------------------:|
-    | AccountDescriptiveName  | customer.descriptive_name         |
-    | Date                    | segments.date                     |
-    | Device                  | segments.device                   |
-    | CampaignName            | campaign.name                     |
-    | AdGroupName             | ad_group.name                     |
-    | Id                      | ad_group_ad.ad.id                 |
-    | AdType                  | ad_group_ad.ad.type               |
-    | Headline                | ad_group_ad.ad.text_ad.headline   |
-    | ImageCreativeName       | ad_group_ad.ad.image_ad.name      |
-    | Clicks                  | metrics.clicks                    |
-    | Impressions             | metrics.impressions               |
-    | Ctr                     | metrics.ctr                       |
-    | AverageCpc              | metrics.average_cpc               |
-    | AverageCpm              | metrics.average_cpm               |
-    | Cost                    | metrics.cost_micros               |
-    | ~~AveragePosition~~     | **(DEPRECATED)**                  |
-    | CreativeFinalUrls       | ad_group_ad.ad.final_urls         |
-    | ExternalCustomerId      | customer.id                       |
-    | CreativeDestinationUrl  | (DEPRECATED)                      |
-    | CreativeFinalMobileUrls | (DEPRECATED)                      |
-    | Status 	              | ad_group_ad.status                |
-    | Conversions             | metrics.conversions               |       
-    | AllConversionValue      | metrics.all_conversions_value     |       
-    | CrossDeviceConversions  | metrics.cross_device_conversions  |
-    | AllConversions          | metrics.all_conversions           |
-    | ConversionValue         | metrics.conversions_value         |
-    | VideoQuartile100Rate    | metrics.video_quartile_p100_rate  |
-    | VideoQuartile75Rate     | metrics.video_quartile_p75_rate   |
-    | VideoQuartile50Rate     | metrics.video_quartile_p50_rate   |            
-    | VideoViews              | metrics.video_views               |
+| Old Fields - AWQL       | New fields - GAQL                 |
+| ----------------------- | ---------------------------------:|
+| AccountDescriptiveName  | customer.descriptive_name         |
+| Date                    | segments.date                     |
+| Device                  | segments.device                   |
+| CampaignName            | campaign.name                     |
+| AdGroupName             | ad_group.name                     |
+| Id                      | ad_group_ad.ad.id                 |
+| AdType                  | ad_group_ad.ad.type               |
+| Headline                | ad_group_ad.ad.text_ad.headline   |
+| ImageCreativeName       | ad_group_ad.ad.image_ad.name      |
+| Clicks                  | metrics.clicks                    |
+| Impressions             | metrics.impressions               |
+| Ctr                     | metrics.ctr                       |
+| AverageCpc              | metrics.average_cpc               |
+| AverageCpm              | metrics.average_cpm               |
+| Cost                    | metrics.cost_micros               |
+| ~~AveragePosition~~     | **(DEPRECATED)**                  |
+| CreativeFinalUrls       | ad_group_ad.ad.final_urls         |
+| ExternalCustomerId      | customer.id                       |
+| CreativeDestinationUrl  | (DEPRECATED)                      |
+| CreativeFinalMobileUrls | (DEPRECATED)                      |
+| Status 	              | ad_group_ad.status                |
+| Conversions             | metrics.conversions               |       
+| AllConversionValue      | metrics.all_conversions_value     |       
+| CrossDeviceConversions  | metrics.cross_device_conversions  |
+| AllConversions          | metrics.all_conversions           |
+| ConversionValue         | metrics.conversions_value         |
+| VideoQuartile100Rate    | metrics.video_quartile_p100_rate  |
+| VideoQuartile75Rate     | metrics.video_quartile_p75_rate   |
+| VideoQuartile50Rate     | metrics.video_quartile_p50_rate   |            
+| VideoViews              | metrics.video_views               |
