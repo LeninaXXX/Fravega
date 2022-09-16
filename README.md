@@ -41,12 +41,11 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
  En circunstancias excepcionales el propio refresh token puede ser ca
 
 ## Appendix:
-#### Files and things to have in mind:
+### Files and things to have in mind:
 
  * `get_reports_in_parallel_original.py` : Where inquiries regarding Google Ads API are concentrated.
   * Queries: This is the example query (lines 46 to 54 as of this writing)
-  
-  ```
+```
    # Define the GAQL query strings to run for each customer ID.
     campaign_query = """
         SELECT campaign.name, campaign.status, campaign.id, metrics.impressions, metrics.clicks
@@ -56,7 +55,7 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
         SELECT campaign.name, campaign.status, campaign.id, ad_group.id, metrics.impressions, metrics.clicks
         FROM ad_group
         WHERE segments.date DURING LAST_7_DAYS"""       # this is what decides the time period
-    ```
+```
 
     `DURING` GAQL parameter has the following allowed values:
     (From: https://developers.google.com/google-ads/api/docs/query/date-ranges )
