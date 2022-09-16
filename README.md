@@ -28,6 +28,14 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
                             REMOVED, UNKNOWN, UNSPECIFIED. Defaults to: ENABLED
  ```
 
+### Refresh de credenciales:
+ Google Ads requiere credenciales para autenticarse, que se vencen a intervalos de unos 30 dias. En tales circunstancias el script falla al correr, reportando error de autenticacion. Ante tal situacion, se requiere refrescar dichas credenciales (_"tokens"_), para ello, ejecutar el script bash:
+
+ `fravega_refresh_token.sh`
+
+ Este script se conectara a los servidores de autenticacion de Google Ads, que proveeran un link, y solicitara un _token_. Ese link debera accederse desde un browser, desde donde se obtendra tal _token_. Este debe ser copiado del browser y provisto al script.
+ De no haber errores en el proceso, los tokens en `google-ads.yaml` estaran refrescados y seran validos por 30 dias (Asumiendo que Google no los revoque por otras razones, e.g.: eventos de seguridad).
+
 ## Appendix:
 #### Files and things to have in mind:
 

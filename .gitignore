@@ -6,8 +6,8 @@ client_secrets.json
 fravega_refresh_token.sh
 out/
 instantclient_21_6/
-# shitty_old_code/
-# dev_code/
+shitty_old_code/
+dev_code/
 
 # Python virtual environment
 venv/
