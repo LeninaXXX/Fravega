@@ -102,7 +102,7 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
 | Cost                                      | metrics.cost_micros
 | ~~AveragePosition~~	                    | **(DEPRECATED)**  
 | QualityScore                              | ad_group_criterion.quality_info.quality_score
-| Labels    			                    | REQUIRES `Select label.name from the resource ad_group_label`
+| ~~Labels~~    			                    | REQUIRES `Select label.name from the resource ad_group_label`
 | SearchImpressionShare                     | metrics.search_impression_share
 | SearchRankLostImpressionShare             | metrics.search_rank_lost_impression_share
 | SearchExactMatchImpressionShare           | metrics.search_exact_match_impression_share
@@ -139,8 +139,8 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
 | ~~AveragePosition~~     | **(DEPRECATED)**                  |
 | CreativeFinalUrls       | ad_group_ad.ad.final_urls         |
 | ExternalCustomerId      | customer.id                       |
-| ~~CreativeDestinationUrl~~  | (DEPRECATED)                      |
-| ~~CreativeFinalMobileUrls~~ | (DEPRECATED)                      |
+| ~~CreativeDestinationUrl~~  | **(DEPRECATED)**                      |
+| ~~CreativeFinalMobileUrls~~ | **(DEPRECATED)**                      |
 | Status 	              | ad_group_ad.status                |
 | Conversions             | metrics.conversions               |       
 | AllConversionValue      | metrics.all_conversions_value     |       
