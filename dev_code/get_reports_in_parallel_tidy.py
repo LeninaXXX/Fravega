@@ -93,11 +93,7 @@ def main(client, customer_ids):
       }
       # Keywords: como vos haces campa#as en marketing para pegarle a palabras. Cuando la gente busca una palabra determinada. Campa#as para laburar con palabras especificas.
       # Ad_Performance: 
-
-      # objetivo de minima:
-      # -------------------
-      # 
-
+     
     ad_performance_query = {
         "name": "ad_performance_query", 
         "query": (

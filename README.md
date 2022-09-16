@@ -1,4 +1,35 @@
-### Files and things to have in mind:
+## Modo de Uso:
+### Archivos Requeridos y modulos requeridos:
+A no ser que se especifique lo contrario, los archivos mencionados deben existir en el mismo directorio que `get_keywords_and_ads_reports_in_parallel.py`.
+
+ * `google-ads.yaml`     : Contiene las credenciales necesarias para autenticarse ante los servicios del __Google Ads API__.
+ * `database.json`       : Contiene las credenciales necesarias para autenticarse ante la database __Oracle SQL Server__.
+ * `instantclient_21_6/` : Directorio. Contiene el cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
+ 
+ ```
+     usage: get_keywords_and_ads_reports_in_parallel.py [-h] -c CUSTOMER_IDS [CUSTOMER_IDS ...]
+                                                       [-l LOGIN_CUSTOMER_ID] [-s START_DATE] [-e END_DATE]
+                                                       [-k CAMPAIGN_STATUS]
+
+    Download a set of reports in parallel from a list of accounts.
+
+    options:
+      -h, --help            show this help message and exit
+      -c CUSTOMER_IDS [CUSTOMER_IDS ...], --customer_ids CUSTOMER_IDS [CUSTOMER_IDS ...]
+                            The Google Ads customer IDs.
+      -l LOGIN_CUSTOMER_ID, --login_customer_id LOGIN_CUSTOMER_ID
+                            The login customer ID (optional).
+      -s START_DATE, --start_date START_DATE
+                            Start date for the queries as YYYY-MM-DD. Defaults to TODAY
+      -e END_DATE, --end_date END_DATE
+                            End date for the queries as YYYY-MM-DD. Defaults to TODAY
+      -k CAMPAIGN_STATUS, --campaign_status CAMPAIGN_STATUS
+                            Specifies campaigns.status for the GAQL request. Valid values: ENABLED, PAUSED,
+                            REMOVED, UNKNOWN, UNSPECIFIED. Defaults to: ENABLED
+ ```
+
+## Appendix:
+#### Files and things to have in mind:
 
  * `get_reports_in_parallel_original.py` : Where inquiries regarding Google Ads API are concentrated.
   * Queries: This is the example query (lines 46 to 54 as of this writing)
@@ -34,11 +65,11 @@
     LAST_WEEK_SUN_SAT 	    The 7-day period starting with the previous Sunday.
     LAST_WEEK_MON_SUN 	    The 7-day period starting with the previous Monday.
 
-### Migration from old-style **Google AdWords** *AdWords Query Language* (AWQL) to **Google Ads** *Google Ads Query Language* (GAQL):
+#### Migration from old-style **Google AdWords** *AdWords Query Language* (AWQL) to **Google Ads** *Google Ads Query Language* (GAQL):
 
 (From: [Resource mappings - Keywords Performance](https://developers.google.com/google-ads/api/docs/migration/mapping#keywords_performance)
 
-#### Keywords Performance
+##### Keywords Performance
     
     | Old Fields - AWQL                         | New fields - GAQL
     | ----------------------------------------- |:---------------------------------------
@@ -73,7 +104,7 @@
     | AveragePageviews                          | metrics.average_page_views
     | VideoViews                                | metrics.video_views
 
-#### Ad Performance
+##### Ad Performance
     
     | Old Fields - AWQL       | New fields - GAQL                 |
     | ----------------------- | ---------------------------------:|
