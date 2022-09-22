@@ -6,6 +6,7 @@ A no ser que se especifique lo contrario, los archivos mencionados deben existir
  * `database.json`       : Contiene las credenciales necesarias para autenticarse ante la database __Oracle SQL Server__.
  * `instantclient_21_6`  : Cliente propietario de __Oracle__, necesario para el funcionamiento del modulo Python `cx_Oracle`, en la version especifica para el entorno en el que el script correra (i.e.: Windows 10, Linux, etc). Se puede hallar en (https://www.oracle.com/database/technologies/instant-client.html).
     Para configurar el cliente Instant Client, se puede, o bien descomentar la llamada a `cx_Oracle.init_oracle_client()` (Linea 22 en la presente version), o bien especificar una variable de entorno que `cx_Oracle` reconocera al momento de ser importada (Ver Documentacion de Instant Client en la URL antes citada)
+
 ### Installacion
 Una vez descomprimido, ejecutar:
 ```
@@ -15,7 +16,6 @@ pip install -r requirements.txt  # Instalacion de dependecias
 ```
 
 ### Modo de Uso:
-
  ```
     usage: get_keywords_and_ads_reports_in_parallel.py [-h] -c CUSTOMER_IDS [CUSTOMER_IDS ...]
                                                        [-l LOGIN_CUSTOMER_ID] [-s START_DATE] [-e END_DATE]
@@ -48,7 +48,17 @@ pip install -r requirements.txt  # Instalacion de dependecias
  De no haber errores en el proceso, los tokens provistos deberan ser reemplazados en `google-ads.yaml`. Dichos tokens seran validos por 30 dias (Asumiendo que Google no los revoque por otras razones, e.g.: eventos de seguridad).
 
 #### Caducidad del refresh_token:
- En circunstancias excepcionales el propio refresh token puede ser ca
+ Ocasionalmente el propio _refresh token_ puede ser revocado. Ante estas circunstancias, el token en cuestion debe ser renovado (semi)manualmente. A tal efecto existe un script que dispara el flow de autenticacion, `semiautorefresh.sh`. La ejecucion de este script proveera una URL y solicitara un codigo. Se debe copiar la URL provista y acceder a ella autenticandose con la cuenta marketing.digital.fravega@gmail.com (__TENER EN MENTE QUE HACE FALTA ACCESO VALIDO A DICHA CUENTA!!!__). Continuar en todas las instancias donde se solicite, hasta que el _refresh token_ sea proporcionado. Este token debe ser copiado, y pegado en la terminal que originalmente nos proporciono la URL y quedo a la espera de un codigo.
+ 
+ En ausencia de errores, el script nos proporcionara un _Refresh token_ (e.g.: `Refresh token: 1//0dTdceNqWmAgeCgYIARAAGA0SNwF-L9IrTsB6hqemeZeoQQIW4-fLTVQsJXDFdHodfwJ7_ic_-Ujyiph4SR5YhoZ2VhzV6E0OBy4`).
+ 
+ Obtenido este _refresh token_, debera ser copiado, y pegado en los archivos `client_secrets.json` y `google-ads.yaml`, _value_ de las linea cuyas _key_ son `refresh_token`.
+
+## TO_DO:
+ * Modificar INSERTciones row-by-row en la database usando `.execute()` por inserciones _en batch_ usando `.executemany()`.
+ * Agregar features que permita consultar la hierarchy de cuentas de Google Ads
+   * ... -ah : Human readable
+   * ... -ar : _raw_ como para ser pipeado 
 
 ## Appendix:
 ### Files and things to have in mind:
